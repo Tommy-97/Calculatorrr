@@ -1,5 +1,3 @@
-package com.company;
-
 import java.util.Scanner;
 
 class Calculator {
@@ -21,7 +19,9 @@ class Calculator {
                     break;
                 }
                 double result = Calculator1.calculate(reader.getVar1(), reader.getVar2(), reader.getOper());
-                System.out.println(result);
+                if (reader.flag)
+                    System.out.println(DataReader.numberToRoman(result));
+                else System.out.println(String.format("%.1f", result));
             }
         }
     }
@@ -33,12 +33,11 @@ class Calculator {
         private int number2;
         private char operation;
         private boolean exitFlag;
+        boolean flag;
         private final char exitCharacter;
-        private final char resultChar;
 
         public DataReader(char exitCharacter) {
             this.exitCharacter = exitCharacter;
-            this.resultChar = '=';
         }
 
 
@@ -56,15 +55,12 @@ class Calculator {
             }
 
             try {
-                if ((text.charAt(text.length() - 1) != resultChar)) {
-                    throw new RuntimeException();
-                }
 
-                text = text.substring(0, text.length() - 1);
+                text = text.substring(0, text.length());
                 String[] blocks = text.split("[+-/*]");
 
                 // проверяем, входит ли строка blocks[0] в массив строк массива "roman"
-                boolean flag = false;
+                flag = false;
                 for (int i = 0; i < roman.length; i++) {
                     if (roman[i].equals(blocks[0]) || roman[i].equals(blocks[1])) {
                         flag = true;
@@ -103,8 +99,6 @@ class Calculator {
             } else if (roman.equals("VI")) {
                 return 6;
             } else if (roman.equals("VII")) {
-
-
                 return 7;
             } else if (roman.equals("VIII")) {
                 return 8;
@@ -117,11 +111,11 @@ class Calculator {
             }
         }
 
-        public int getVar1() {
+        public double getVar1() {
             return number1;
         }
 
-        public int getVar2() {
+        public double getVar2() {
             return number2;
         }
 
@@ -132,14 +126,29 @@ class Calculator {
         public boolean isExitFlag() {
             return exitFlag;
         }
+
+        public static String numberToRoman(double number) {
+
+            String[] arrE = {"", "I", "II", "III", "IV", "V", "IV", "VII", "VIII", "IX"};
+            String[] arrD = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC","C"};
+            int num1 = (int) (number % 10);
+            int num10 = (int) (number / 10);
+            String numberStr = String.format("%.1f", number);
+            int index = numberStr.indexOf(",");
+            String numost = numberStr.substring(index+1, numberStr.length());
+            if (Integer.parseInt(numost) > 0)
+                return arrD[num10] + "" + arrE[num1] + "," + arrE[Integer.parseInt(numost)];
+            else return arrD[num10] + "" + arrE[num1];
+        }
+
     }
 
     protected static class Calculator1 {
         private Calculator1() {
         }
 
-        public static double calculate(int number1, int number2, char operation) {
-            int result = 0;
+        public static double calculate(double number1, double number2, char operation) {
+            double result = 0;
             switch (operation) {
                 case '+':
                     result = number1 + number2;
