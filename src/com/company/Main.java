@@ -131,14 +131,9 @@ class Calculator {
 
             String[] arrE = {"", "I", "II", "III", "IV", "V", "IV", "VII", "VIII", "IX"};
             String[] arrD = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC","C"};
-            int num1 = (int) (number % 10);
+            int num1 =  (int)(number % 10);
             int num10 = (int) (number / 10);
-            String numberStr = String.format("%.1f", number);
-            int index = numberStr.indexOf(",");
-            String numost = numberStr.substring(index+1, numberStr.length());
-            if (Integer.parseInt(numost) > 0)
-                return arrD[num10] + "" + arrE[num1] + "," + arrE[Integer.parseInt(numost)];
-            else return arrD[num10] + "" + arrE[num1];
+            return arrD[num10] + "" + arrE[num1];
         }
 
     }
